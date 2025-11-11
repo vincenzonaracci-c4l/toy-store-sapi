@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="get-customer-noord" doc:id="09f2cf2a-7790-4d29-a92c-b75aa3bc35bf" >
+		<db:select doc:name="Select customer without order" doc:id="de3a476a-f8d1-4b15-9a8c-b99be9faa99b" config-ref="Database_Config">
+			<db:sql ><![CDATA[select
+	*
+from
+	users u
+left join orders o on
+	u.user_id = o."user_id_FK" 
+where
+	o.order_id is null]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="3a55ccba-81c8-45c1-972d-7ba5d765776e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

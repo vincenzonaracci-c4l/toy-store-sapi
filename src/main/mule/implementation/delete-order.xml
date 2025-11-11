@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<sub-flow name="delete-order" doc:id="b83498bb-db8f-450d-9726-0eaca74e18cb" >
+		<logger level="INFO" doc:name="Logger" doc:id="cb8a3b34-9f99-4433-a28e-1bd6f3538326" />
+	</sub-flow>
+</mule>

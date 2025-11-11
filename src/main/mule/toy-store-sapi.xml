@@ -11,8 +11,8 @@
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="toy-store-sapi-config" />
-		<error-handler ref="Error_Handler_APIKIT" />
-   </flow>
+        <error-handler ref="Error_Handler_APIKIT" />
+    </flow>
     <flow name="toy-store-sapi-console">
         <http:listener config-ref="toy-store-sapi-httpListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -24,119 +24,39 @@
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="toy-store-sapi-config" />
-		<error-handler ref="Error_Handler_APIConsole" />
-  </flow>
-    <flow name="put:\update-order:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "Order and payment updated successfully"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+        <error-handler ref="Error_Handler_APIConsole" />
+    </flow>
+    <flow name="put:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
+        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="e66560c5-a21c-411c-b67f-de3fa900f652" variableName="URIparams"/>
+		<flow-ref doc:name="put-update-order" doc:id="865d8b45-6544-4d00-9bbd-3eb1f9bdfc6a" name="put-update-order"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
-    <flow name="put:\update-user:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "User updated successfully"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="put:\customer\(customerID):application\json:toy-store-sapi-config">
+        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="c23d092f-1cab-4e0d-8da8-887875e7ee94" variableName="URIparams" />
+		<flow-ref doc:name="put-update-user" doc:id="1208dfe0-46bd-4112-a136-159047903246" name="put-update-user"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
-    <flow name="delete:\delete-customer:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-"Customer deleted successfully" as String {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="delete:\customer\(customerID)\orders:toy-store-sapi-config">
+        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="4a2cb6c4-c58a-46dc-abcd-b7b6cf60a67d" variableName="URIparams" />
+		<flow-ref doc:name="delete-order" doc:id="4bf17c6d-8aa5-4bce-ae8f-c8a4f948809a" name="delete-order"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
-    <flow name="delete:\delete-orders:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-"Order deleted successfully" as String {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="delete:\customer\(customerID):toy-store-sapi-config">
+        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="f2f30c0f-a96d-4c3e-84d8-e46671dedffe" variableName="URIparams" />
+		<flow-ref doc:name="delete-customer" doc:id="940cec6d-f72d-4c3c-88b2-5b5d34f4757e" name="delete-customer"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
     <flow name="get:\customer:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerCode: 12345,
-  customerInfo: {
-    firstName: "Ciccio",
-    lastName: "Pasticcio",
-    gender: "Female",
-    address: {
-      street: "Via Diaz",
-      city: "Kiev",
-      state: "Ukrain"
-    },
-    orders: {
-      products: "Pencilcase",
-      paymentTypes: "Bancomat",
-      totalSpending: 132.32,
-      discountedSpending: 130
-    }
-  }
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="get-customer-noord" doc:id="1e05dd77-e2b0-4e8c-8681-4a5666e47360" name="get-customer-noord"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
-    <flow name="get:\customer-noord:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerCode: 12345,
-  customerInfo: {
-    firstName: "Ciccio",
-    lastName: "Pasticcio",
-    gender: "Female",
-    address: {
-      street: "Via Diaz",
-      city: "Kiev",
-      state: "Ukrain"
-    }
-  }
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="get:\customer\(customerID):toy-store-sapi-config">
+		<set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="5bbec9aa-d2dd-41e5-ac96-7d64c4021291" variableName="URIparams" />
+		<flow-ref doc:name="get-customer" doc:id="e8e30e49-9602-445e-8cc7-8dc8811e2976" name="get-customer"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
-    <flow name="post:\create-user:toy-store-sapi-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  message: "User created successfully"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="post:\customer:application\json:toy-store-sapi-config">
+		<flow-ref doc:name="post-create-user" doc:id="6e818068-06f2-4ab7-a400-e161b69a25f7" name="post-create-user"/>
 		<error-handler ref="Error_Handler_APP" />
     </flow>
 </mule>

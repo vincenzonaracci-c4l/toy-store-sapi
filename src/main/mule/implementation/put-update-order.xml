@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="put-update-order" doc:id="96645f5e-0d2a-4fd4-8c25-a15a61110893" >
+		<db:update doc:name="Update an order by it's order ID" doc:id="01c2846d-019f-4785-8635-671304c5d1aa" config-ref="Database_Config">
+			<db:sql ><![CDATA[update
+	orders o
+set
+	user_id = :customerCode,
+	product_name = :description,
+	brand = :brand,
+	price = :price,
+	quantity = :quantity,
+	discount = :discount,
+	order_date = :order_date
+where
+	o.order_id = :orderCode]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:update>
+	</sub-flow>
+</mule>

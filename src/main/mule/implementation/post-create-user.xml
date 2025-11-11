@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="post-create-user"
+		doc:id="fc8fd5d8-e5ed-4dbf-96e7-1562d34fd653">
+		<db:insert doc:name="Create a new customer with it's order"
+			doc:id="314864c3-3fd2-408e-8eea-c2f22bc70dd1"
+			config-ref="Database_Config">
+			<db:sql><![CDATA[insert into users (first_name, last_name, gender, street, city, state)
+values ('John', 'Doe', 'M', '123 Main St', 'New York', 'NY');]]></db:sql>
+			<db:input-parameters><![CDATA[#[payload]]]></db:input-parameters>
+		</db:insert>
+		<db:insert doc:name="Insert" doc:id="173c1143-1126-4dc4-af9a-b47bdc5be07a" config-ref="Database_Config">
+			<db:sql ><![CDATA[insert into orders (user_id, product_name, brand, price, quantity, discount, order_date)
+values (1, 'Wireless Headphones', 'SoundMax', 99.99, 1, 0.10, '2025-10-01 10:30:00');]]></db:sql>
+		</db:insert>
+	</sub-flow>
+</mule>
