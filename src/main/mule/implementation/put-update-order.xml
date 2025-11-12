@@ -10,16 +10,23 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 			<db:sql ><![CDATA[update
 	orders o
 set
-	user_id = :customerCode,
+	"user_id_FK" = :customerCode,
 	product_name = :description,
 	brand = :brand,
 	price = :price,
 	quantity = :quantity,
-	discount = :discount,
-	order_date = :order_date
+	discount = :discount
 where
 	o.order_id = :orderCode]]></db:sql>
-			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+			<db:input-parameters ><![CDATA[#[{
+	'customerCode': vars.URIparams,
+	'description': payload.order.description,
+	'brand': payload.order.brand,
+	'price': payload.order.price,
+	'quantity': payload.order.quantity,
+	'discount': payload.order.discount,
+	'orderCode': payload.orderCode
+}]]]></db:input-parameters>
 		</db:update>
 	</sub-flow>
 </mule>
