@@ -80,7 +80,7 @@
 		<dependency>
 			<groupId>89799b47-5637-405f-94db-38eccef79285</groupId>
 			<artifactId>toy-store-sapi</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>

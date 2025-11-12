@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="get-order" doc:id="d4c5b0c9-337d-4266-a983-15d143211b31" >
+		<db:select doc:name="Select orders by userID" doc:id="9c551078-1ee5-49bb-b962-57fe245a3cdd" config-ref="Database_Config">
+			<db:sql ><![CDATA[select
+	*
+from
+	orders o
+where
+	o."user_id_FK" = :customerID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	'customerID': vars.URIparams
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Normalize the DB result" doc:id="36e35c5e-c449-4d20-b2f5-cc07aeb4b6b9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

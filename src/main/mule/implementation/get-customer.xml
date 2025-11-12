@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="get-customer" doc:id="f1196303-c8a6-41cc-81c1-99d3735d3d3c" >
-		<db:select doc:name="Select customer by ID" doc:id="7c62136e-a48e-4483-b3b3-299bf44d6854" config-ref="Database_Config" target="customer">
+		<db:select doc:name="Select customer by ID" doc:id="7c62136e-a48e-4483-b3b3-299bf44d6854" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	*
 from
@@ -17,52 +18,12 @@ where
 	'customerID': vars.URIparams
 }]]]></db:input-parameters>
 		</db:select>
-		<db:select doc:name="Select orders by userID" doc:id="5c34e85e-f1fb-4b75-a5f4-69d78e3ac81c" config-ref="Database_Config" target="orders">
-			<db:sql ><![CDATA[select
-	*
-from
-	orders o
-where
-	o."user_id_FK" = :customerID]]></db:sql>
-			<db:input-parameters ><![CDATA[#[{
-	'customerID': vars.URIparams
-}]]]></db:input-parameters>
-		</db:select>
-		<ee:transform doc:name="Transform Message" doc:id="815df9a8-606e-44f2-a6f7-5ea019e56942">
-			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-fun sumNumber(x) = do {
-  x reduce ((item, acc) -> acc + item)
-}
-fun concatenate(x) = do {
-  x reduce ((item, acc) -> acc ++ " - " ++ item)
-}
-output application/json  
+		<ee:transform doc:name="Normalize the DB result" doc:id="87c7c462-09f1-410c-8b31-e3804dd0ceed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
 ---
-vars.customer map ((item, index) -> {
-  "customerCode": item.user_id,
-  "customerInfo": {
-    "firstName": item.first_name,
-    "lastName": item.last_name,
-    "gender": 
-      if (item.gender == "M")
-        "Male"
-      else if (item.gender == "F")
-        "Female"
-      else
-        "Other",
-    "address": {
-      "street": item.street,
-      "city": item.city,
-      "state": item.state
-    },
-    "orders": {
-      "products": concatenate(vars.orders.product_name),
-      "totalSpending": sumNumber(vars.orders.price),
-      "totalDiscount": sumNumber(vars.orders.discount)
-    }
-  }
-})]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</sub-flow>
