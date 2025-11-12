@@ -17,6 +17,15 @@ set
 	state = :state
 where
 	u.user_id = :customerID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	'firstName': payload.firstName,
+	'lastName': payload.lastName,
+	'gender': payload.gender,
+	'street': payload.address,
+	'city': payload.city,
+	'state': payload.state,
+	'customerID': payload.customerCode
+}]]]></db:input-parameters>
 		</db:update>
 	</sub-flow>
 </mule>
