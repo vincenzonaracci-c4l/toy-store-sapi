@@ -1,23 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="post-create-user"
 		doc:id="fc8fd5d8-e5ed-4dbf-96e7-1562d34fd653">
-		<db:insert doc:name="Create a new customer with it's order"
+		<db:insert doc:name="Create a new customer"
 			doc:id="314864c3-3fd2-408e-8eea-c2f22bc70dd1"
 			config-ref="Database_Config">
 			<db:sql><![CDATA[insert into users (first_name, last_name, gender, street, city, state)
-values ('John', 'Doe', 'M', '123 Main St', 'New York', 'NY');]]></db:sql>
-			<db:input-parameters><![CDATA[#[payload]]]></db:input-parameters>
+values (:firstname, :lastname, :gender, :street, :city, :state);]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+	'firstname' : payload.firstName,
+	'lastname' : payload.lastName,
+	'gender' : payload.gender,
+	'street' : payload.address,
+	'city' : payload.city,
+	'state' : payload.state
+}]]]></db:input-parameters>
 		</db:insert>
-		<db:insert doc:name="Insert" doc:id="173c1143-1126-4dc4-af9a-b47bdc5be07a" config-ref="Database_Config">
-			<db:sql ><![CDATA[insert into orders (user_id, product_name, brand, price, quantity, discount, order_date)
-values (1, 'Wireless Headphones', 'SoundMax', 99.99, 1, 0.10, '2025-10-01 10:30:00');]]></db:sql>
-		</db:insert>
+		<db:select doc:name="Select the userID of the last created" doc:id="bd61f655-4151-46c8-befe-bf227eba92e3" config-ref="Database_Config">
+			<db:sql ><![CDATA[select
+	u.user_id 
+from
+	users u
+order by
+	u.user_id desc
+limit 1]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Normalize the result from the DB" doc:id="bd25d993-013e-4551-9840-b8a9dd9a3629" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 </mule>

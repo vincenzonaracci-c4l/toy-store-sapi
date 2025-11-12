@@ -61,12 +61,12 @@
     </flow>
     <flow name="get:\customer\(customerID)\orders:toy-store-sapi-config">
         <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="51588be4-3507-406c-b6c0-03389341c6af" variableName="URIparams" />
-		<flow-ref doc:name="get-order" doc:id="a885aae1-d2ac-4383-b8b3-f7a26f063c48" name="get-order"/>
-		<error-handler ref="Error_Handler_APP" />
+        <flow-ref doc:name="get-order" doc:id="a885aae1-d2ac-4383-b8b3-f7a26f063c48" name="get-order" />
+        <error-handler ref="Error_Handler_APP" />
     </flow>
     <flow name="post:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
         <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="6968d2a0-dffe-4c97-b9f0-cc9e465d557a" variableName="URIparams" />
-		<flow-ref doc:name="post-create-order" doc:id="fe2eeb62-9788-47c6-be9e-28e0d57ebcfd" name="post-create-order"/>
-		<error-handler ref="Error_Handler_APP" />
+        <flow-ref doc:name="post-create-order" doc:id="fe2eeb62-9788-47c6-be9e-28e0d57ebcfd" name="post-create-order" />
+        <error-handler ref="Error_Handler_APP" />
     </flow>
 </mule>
