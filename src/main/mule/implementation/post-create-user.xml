@@ -9,6 +9,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="post-create-user"
 		doc:id="fc8fd5d8-e5ed-4dbf-96e7-1562d34fd653">
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="6808578f-7fe9-4f4f-99dc-663e08c2767a" message="#[payload]" />
 		<db:insert doc:name="Create a new customer"
 			doc:id="314864c3-3fd2-408e-8eea-c2f22bc70dd1"
 			config-ref="Database_Config">
@@ -23,6 +24,7 @@ values (:firstname, :lastname, :gender, :street, :city, :state);]]></db:sql>
 	'state' : payload.state
 }]]]></db:input-parameters>
 		</db:insert>
+		<logger level="INFO" doc:name="Logger after the 1st DB operation" doc:id="d9ebea47-578f-44a3-87bf-e18f37e914b8" message='"Operation successfull"' />
 		<db:select doc:name="Select the userID of the last created" doc:id="bd61f655-4151-46c8-befe-bf227eba92e3" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	u.user_id 
@@ -40,5 +42,6 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="a3615da5-ff61-4695-986f-9bf9a82a535f" message='"Operation successfull"' />
 	</sub-flow>
 </mule>

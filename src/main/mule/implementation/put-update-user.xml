@@ -5,6 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<sub-flow name="put-update-user" doc:id="fc8f7fda-3537-4fbd-9f0f-2c0acc3aa795" >
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="ed785d53-c7d4-48e8-a3e3-bd0ad75986f0" message="#[payload]" />
 		<db:update doc:name="Update customer by it's ID" doc:id="3eaf94f2-78c4-42d5-ae61-575c72352246" config-ref="Database_Config">
 			<db:sql ><![CDATA[update
 	users u
@@ -27,5 +28,6 @@ where
 	'customerID': payload.customerCode
 }]]]></db:input-parameters>
 		</db:update>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="4d2a663d-6886-4aff-be32-187ea28241b2" message='"Operation successfull"' />
 	</sub-flow>
 </mule>

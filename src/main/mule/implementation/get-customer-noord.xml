@@ -6,6 +6,7 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="get-customer-noord" doc:id="09f2cf2a-7790-4d29-a92c-b75aa3bc35bf" >
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="836e7dfe-ea52-4a7e-acd5-48c2f622d5ba" message="#[payload]" />
 		<db:select doc:name="Select customer without order" doc:id="de3a476a-f8d1-4b15-9a8c-b99be9faa99b" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	*
@@ -24,5 +25,6 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="1882ee8b-c8c0-4032-a793-0e2bf626d83b" message="#[payload]" />
 	</sub-flow>
 </mule>

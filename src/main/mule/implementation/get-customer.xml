@@ -7,6 +7,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="get-customer" doc:id="f1196303-c8a6-41cc-81c1-99d3735d3d3c" >
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="0093ac4d-ad27-4674-b56f-364702b9fb29" message="#[payload]"/>
 		<db:select doc:name="Select customer by ID" doc:id="7c62136e-a48e-4483-b3b3-299bf44d6854" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	*
@@ -26,5 +27,6 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="5dcec480-6daf-4261-90ad-c1d4a74c4b62" message="#[payload]" />
 	</sub-flow>
 </mule>

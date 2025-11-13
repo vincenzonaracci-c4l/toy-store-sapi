@@ -6,6 +6,7 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="post-create-order" doc:id="9349ac20-e1e5-4bc1-aa27-5d5c8f397108" >
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="f6506c40-bd9e-44a0-8af3-b7e0a478c3f5" message="#[payload]" />
 		<db:bulk-insert doc:name="Bulk insert" doc:id="59782500-fcf6-4a3c-b80b-1b199cdd8724" config-ref="Database_Config">
 			<db:bulk-input-parameters ><![CDATA[#[%dw 2.0
 output application/json
@@ -21,5 +22,6 @@ payload map ((item, index) -> {
 			<db:sql ><![CDATA[insert into orders ("user_id_FK", product_name, brand, price, quantity, discount)
 values (:userid, :productname, :brand, :price, :quantity, :discount);]]></db:sql>
 		</db:bulk-insert>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="bb83a5a0-3d96-4ac0-b062-b17be24d2fbe" message='"Operation successfull"' />
 	</sub-flow>
 </mule>
