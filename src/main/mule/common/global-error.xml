@@ -8,104 +8,177 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
 	<error-handler name="Error_Handler_APIKIT">
 		<on-error-propagate type="APIKIT:BAD_REQUEST">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Bad Request" doc:id="b562140c-9f22-41f8-8819-5d398db51192" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
 output application/json
 ---
-{message: "Bad request"}]]></ee:set-payload>
+{
+	"internalCode": "ERR400",
+	"title": "Bad Request",
+	"category": error.errorType.identifier,
+	"description": error.description substringBy $ == "\n",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">400</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[400]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 		<on-error-propagate type="APIKIT:NOT_FOUND">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Not Found" doc:id="befa3073-1d91-4d0f-a7c4-e737fba73f10" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]></ee:set-payload>
+{
+	"internalCode": "ERR404",
+	"title": "Not Found",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">404</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 		<on-error-propagate
 			type="APIKIT:METHOD_NOT_ALLOWED">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Method Not Allowed" doc:id="a8476a61-7e34-4fad-8c6d-bbfd1334f72b" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Method not allowed"}]]></ee:set-payload>
+{
+	"internalCode": "ERR405",
+	"title": "Method Not Allowed",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">405</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[405]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 		<on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Not Acceptable" doc:id="7302b320-c6b1-4262-8349-510807b1d568" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not acceptable"}]]></ee:set-payload>
+{
+	"internalCode": "ERR406",
+	"title": "Not Acceptable",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">406</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[406]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 		<on-error-propagate
 			type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Unsupported Media Type" doc:id="858ade09-d7bf-414f-9d6a-f4636713adda" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Unsupported media type"}]]></ee:set-payload>
+{
+	"internalCode": "ERR415",
+	"title": "Unsupported Media Type",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">415</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[415]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 		<on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+			<ee:transform doc:name="Method Not Implemented" doc:id="9151876b-3722-4475-ae5a-75ce4da9b4d1" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Not Implemented"}]]></ee:set-payload>
+{
+	"internalCode": "ERR405",
+	"title": "Method Not Implemented",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">501</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
-	</error-handler>
-	<error-handler name="Error_Handler_APIConsole">
-		<on-error-propagate type="APIKIT:NOT_FOUND">
-			<ee:transform doc:name="Transform Message">
-				<ee:message>
-					<ee:set-payload><![CDATA[%dw 2.0
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate1" doc:id="2ba97114-c5be-4063-80dd-7f3de94a9450" type="ANY" >
+			<ee:transform doc:name="Any" doc:id="bca8e6b1-0dee-456f-92f6-db8dca1071ea" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-{message: "Resource not found"}]]></ee:set-payload>
+{
+	"internalCode": "ERR500",
+	"title": "Not Found",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
 				</ee:message>
-				<ee:variables>
-					<ee:set-variable variableName="httpStatus">404</ee:set-variable>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
 		</on-error-propagate>
 	</error-handler>
 	<error-handler name="Error_Handler_APP" doc:id="42f4888c-68ab-48f5-8b94-3344135005eb" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bbcc5faa-a93f-4185-aca5-a3afa06b4e8b" >
-			<logger level="INFO" doc:name="Logger" doc:id="38b5a29d-fe79-45d6-903e-fbecce963752" />
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bbcc5faa-a93f-4185-aca5-a3afa06b4e8b" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
+			<ee:transform doc:name="Unexpected Error" doc:id="e57c79d2-ec09-4950-a6a1-53d3304d7127" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"internalCode": "ERR500",
+	"title": "Unexpected Error",
+	"category": error.errorType.identifier,
+	"description": error.description replace  "\n" with " ",
+	"correlationId": correlationId,
+	"timestamp": (now() >> "CET")
+}
+]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
 		</on-error-propagate>
 	</error-handler>
 

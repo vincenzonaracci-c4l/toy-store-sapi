@@ -13,19 +13,6 @@
         <apikit:router config-ref="toy-store-sapi-config" />
         <error-handler ref="Error_Handler_APIKIT" />
     </flow>
-    <flow name="toy-store-sapi-console">
-        <http:listener config-ref="toy-store-sapi-httpListenerConfig" path="/console/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
-        <apikit:console config-ref="toy-store-sapi-config" />
-        <error-handler ref="Error_Handler_APIConsole" />
-    </flow>
     <flow name="put:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
         <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="e66560c5-a21c-411c-b67f-de3fa900f652" variableName="URIparams" />
         <flow-ref doc:name="put-update-order" doc:id="865d8b45-6544-4d00-9bbd-3eb1f9bdfc6a" name="put-update-order" />
