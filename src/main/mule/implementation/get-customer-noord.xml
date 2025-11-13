@@ -16,7 +16,7 @@ left join orders o on
 where
 	o.order_id is null]]></db:sql>
 		</db:select>
-		<ee:transform doc:name="Transform Message" doc:id="3a55ccba-81c8-45c1-972d-7ba5d765776e" >
+		<ee:transform doc:name="Normalize the DB result" doc:id="3a55ccba-81c8-45c1-972d-7ba5d765776e" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
