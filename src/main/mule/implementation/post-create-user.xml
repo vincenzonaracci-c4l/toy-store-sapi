@@ -9,13 +9,14 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="post-create-user"
 		doc:id="fc8fd5d8-e5ed-4dbf-96e7-1562d34fd653">
-		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="6808578f-7fe9-4f4f-99dc-663e08c2767a" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="afb27e71-9ccc-4d24-8882-85c7642a7015" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
 		<db:insert doc:name="Create a new customer"
 			doc:id="314864c3-3fd2-408e-8eea-c2f22bc70dd1"
 			config-ref="Database_Config">
-			<db:sql><![CDATA[insert into users (first_name, last_name, gender, street, city, state)
-values (:firstname, :lastname, :gender, :street, :city, :state);]]></db:sql>
+			<db:sql><![CDATA[insert into users (customer_code,first_name, last_name, gender, street, city, state)
+values (:customerCode, :firstname, :lastname, :gender, :street, :city, :state);]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
+	'customerCode': payload.customerCode,
 	'firstname' : payload.firstName,
 	'lastname' : payload.lastName,
 	'gender' : payload.gender,
@@ -24,16 +25,7 @@ values (:firstname, :lastname, :gender, :street, :city, :state);]]></db:sql>
 	'state' : payload.state
 }]]]></db:input-parameters>
 		</db:insert>
-		<logger level="INFO" doc:name="Logger after the 1st DB operation" doc:id="d9ebea47-578f-44a3-87bf-e18f37e914b8" message='"Operation successfull"' />
-		<db:select doc:name="Select the userID of the last created" doc:id="bd61f655-4151-46c8-befe-bf227eba92e3" config-ref="Database_Config">
-			<db:sql ><![CDATA[select
-	u.user_id 
-from
-	users u
-order by
-	u.user_id desc
-limit 1]]></db:sql>
-		</db:select>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="2b382bed-2363-479a-8546-88e9b9336e19" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 		<ee:transform doc:name="Normalize the result from the DB" doc:id="bd25d993-013e-4551-9840-b8a9dd9a3629" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -42,6 +34,5 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="a3615da5-ff61-4695-986f-9bf9a82a535f" message='"Operation successfull"' />
 	</sub-flow>
 </mule>

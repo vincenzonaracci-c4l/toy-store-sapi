@@ -6,16 +6,12 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="get-customer-noord" doc:id="09f2cf2a-7790-4d29-a92c-b75aa3bc35bf" >
-		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="836e7dfe-ea52-4a7e-acd5-48c2f622d5ba" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="15c16404-3ef1-424e-b16b-aed822af3caa" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
 		<db:select doc:name="Select customer without order" doc:id="de3a476a-f8d1-4b15-9a8c-b99be9faa99b" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	*
 from
-	users u
-left join orders o on
-	u.user_id = o."user_id_FK" 
-where
-	o.order_id is null]]></db:sql>
+	users u]]></db:sql>
 		</db:select>
 		<ee:transform doc:name="Normalize the DB result" doc:id="3a55ccba-81c8-45c1-972d-7ba5d765776e" >
 			<ee:message >
@@ -25,6 +21,6 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="1882ee8b-c8c0-4032-a793-0e2bf626d83b" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="3ded1ab3-f070-4c36-8837-adac3c78ddcf" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 	</sub-flow>
 </mule>

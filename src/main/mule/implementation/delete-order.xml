@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<sub-flow name="delete-order" doc:id="b83498bb-db8f-450d-9726-0eaca74e18cb" >
-		<logger level="INFO" doc:name="Logger" doc:id="cb8a3b34-9f99-4433-a28e-1bd6f3538326" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="283cfb42-33fa-4b38-9df4-58b3fbe2aa1a" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
+		<db:delete doc:name="Delete orders" doc:id="20ae081a-d2b6-4682-bb25-c3903247b925" config-ref="Database_Config">
+			<db:sql ><![CDATA[delete
+from
+orders o
+where
+o.user_code_id = :userCodeId]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	'userCodeId': vars.URIparams
+}]]]></db:input-parameters>
+		</db:delete>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="4dd0c22f-34af-435f-af96-8cca81ea129a" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 	</sub-flow>
 </mule>

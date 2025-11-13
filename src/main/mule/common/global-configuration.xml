@@ -3,7 +3,7 @@
     <http:listener-config name="toy-store-sapi-httpListenerConfig">
         <http:listener-connection host="${http.listener.host}" port="${http.listener.port}" />
     </http:listener-config>
-    <apikit:config name="toy-store-sapi-config" api="resource::89799b47-5637-405f-94db-38eccef79285:toy-store-sapi:1.0.4:raml:zip:toy-store-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="toy-store-sapi-config" api="resource::89799b47-5637-405f-94db-38eccef79285:toy-store-sapi:1.0.5:raml:zip:toy-store-sapi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <global-property doc:name="Global Property" doc:id="e3b4a74e-de83-4199-80e4-e1a2efe89f7b" name="mule.env" value="loc" />
     <configuration-properties doc:name="Configuration properties" doc:id="bc0adb82-cfd3-44c9-987d-3861a9b2903a" file="properties/${mule.env}.yaml" />
     <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="82d9b209-c1be-414b-833c-d6d1416804ea" file="properties/${mule.env}-secure.yaml" key="${encryption.key}">

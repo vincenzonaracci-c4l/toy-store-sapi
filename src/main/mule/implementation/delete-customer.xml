@@ -5,6 +5,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<sub-flow name="delete-customer" doc:id="cdc7a75c-3007-416c-a9bd-055dde233304" >
-		<logger level="INFO" doc:name="Logger" doc:id="e2bd7848-4412-465d-a721-99244041b6a1" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="02152c40-cec0-4d7a-b8bb-a99ea63f8efe" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
+		<db:delete doc:name="Delete customer" doc:id="ea7382c2-a556-43e1-8758-df11398782be" config-ref="Database_Config" >
+			<db:sql ><![CDATA[delete
+from
+users u
+where
+u.customer_code = :customerCode]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	'customerCode': vars.URIparams
+}]]]></db:input-parameters>
+		</db:delete>
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="109a537d-209b-44e5-b622-84c72d528d06" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 	</sub-flow>
 </mule>

@@ -6,12 +6,12 @@
 http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<sub-flow name="put-update-order" doc:id="96645f5e-0d2a-4fd4-8c25-a15a61110893" >
-		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="d2c6cab0-0484-40e2-902b-60a86754582e" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="4ed0388e-fffe-474f-a549-51ed02b806b6" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
 		<db:update doc:name="Update an order by it's order ID" doc:id="01c2846d-019f-4785-8635-671304c5d1aa" config-ref="Database_Config">
 			<db:sql ><![CDATA[update
 	orders o
 set
-	"user_id_FK" = :customerCode,
+	user_code_id = :customerCode,
 	product_name = :description,
 	brand = :brand,
 	price = :price,
@@ -29,6 +29,6 @@ where
 	'orderCode': payload.orderCode
 }]]]></db:input-parameters>
 		</db:update>
-		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="4fbfc0f8-7bc0-434b-9c2e-b5c534ce0e99" message='"Operation successfull"' />
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="398704fc-f0db-4cec-b391-77752c6d673c" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 	</sub-flow>
 </mule>

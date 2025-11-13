@@ -6,14 +6,14 @@
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="get-order" doc:id="d4c5b0c9-337d-4266-a983-15d143211b31" >
-		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="fbda9f81-ef36-42aa-af95-d18c13805f53" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger before the DB operation" doc:id="7aa12d42-8cf6-4e61-a001-5b95c9fad3b0" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"Before the DB operation, with following body: " ++ write(payload, "application/json")]' />
 		<db:select doc:name="Select orders by userID" doc:id="9c551078-1ee5-49bb-b962-57fe245a3cdd" config-ref="Database_Config">
 			<db:sql ><![CDATA[select
 	*
 from
 	orders o
 where
-	o."user_id_FK" = :customerID]]></db:sql>
+	o.user_code_id = :customerID]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
 	'customerID': vars.URIparams
 }]]]></db:input-parameters>
@@ -26,6 +26,6 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="f4f4158d-c7d1-4d35-ab33-5b0f1a9c54de" message="#[payload]" />
+		<logger level="INFO" doc:name="Logger after the DB operation" doc:id="4d73c1ca-b999-4e31-b6e3-1133d6f61621" message='#[%dw 2.0&#10;output application/java&#10;---&#10;"After the DB operation, with following body: " ++ write(payload, "application/json")]' />
 	</sub-flow>
 </mule>
