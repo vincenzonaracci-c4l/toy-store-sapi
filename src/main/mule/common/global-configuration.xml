@@ -10,7 +10,7 @@
         <secure-properties:encrypt algorithm="Blowfish" />
     </secure-properties:config>
     <db:config name="Database_Config" doc:name="Database Config" doc:id="e7de542d-4a35-4529-bfd7-fbae77449340">
-        <db:generic-connection url="jdbc:postgresql://${db.host}:${db.port}/${db.name}" driverClassName="org.postgresql.Driver" user="${secure::db.user}" password="${secure::db.password}" />
+        <db:generic-connection url="${db.url}" driverClassName="org.postgresql.Driver" user="${secure::db.user}" password="${secure::db.password}" />
     </db:config>
     <global-property doc:name="Global Property" doc:id="acb190bc-bd3d-48dc-bd3d-2506d71d6c9a" name="encryption.key" value="&quot;&quot;" />
 </mule>
