@@ -158,28 +158,5 @@ output application/json
 			</ee:transform>
 		</on-error-propagate>
 	</error-handler>
-	<error-handler name="Error_Handler_APP" doc:id="42f4888c-68ab-48f5-8b94-3344135005eb" >
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bbcc5faa-a93f-4185-aca5-a3afa06b4e8b" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
-			<ee:transform doc:name="Unexpected Error" doc:id="e57c79d2-ec09-4950-a6a1-53d3304d7127" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-	"internalCode": "ERR500",
-	"title": "Unexpected Error",
-	"category": error.errorType.identifier,
-	"description": error.description replace  "\n" with " ",
-	"correlationId": correlationId,
-	"timestamp": (now() >> "CET")
-}
-]]></ee:set-payload>
-				</ee:message>
-				<ee:variables >
-					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
-				</ee:variables>
-			</ee:transform>
-		</on-error-propagate>
-	</error-handler>
 
 </mule>

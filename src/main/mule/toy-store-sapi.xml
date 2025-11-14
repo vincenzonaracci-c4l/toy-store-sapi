@@ -1,59 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
-    <flow name="toy-store-sapi-main">
-        <http:listener config-ref="toy-store-sapi-httpListenerConfig" path="/api/*">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:response>
-            <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
-            </http:error-response>
-        </http:listener>
-        <apikit:router config-ref="toy-store-sapi-config" />
-        <error-handler ref="Error_Handler_APIKIT" />
-    </flow>
-    <flow name="put:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="e66560c5-a21c-411c-b67f-de3fa900f652" variableName="URIparams" />
-        <flow-ref doc:name="put-update-order" doc:id="865d8b45-6544-4d00-9bbd-3eb1f9bdfc6a" name="put-update-order" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="put:\customer\(customerID):application\json:toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="c23d092f-1cab-4e0d-8da8-887875e7ee94" variableName="URIparams" />
-        <flow-ref doc:name="put-update-user" doc:id="1208dfe0-46bd-4112-a136-159047903246" name="put-update-user" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="delete:\customer\(customerID)\orders:toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="4a2cb6c4-c58a-46dc-abcd-b7b6cf60a67d" variableName="URIparams" />
-        <flow-ref doc:name="delete-order" doc:id="4bf17c6d-8aa5-4bce-ae8f-c8a4f948809a" name="delete-order" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="delete:\customer\(customerID):toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="f2f30c0f-a96d-4c3e-84d8-e46671dedffe" variableName="URIparams" />
-        <flow-ref doc:name="delete-customer" doc:id="940cec6d-f72d-4c3c-88b2-5b5d34f4757e" name="delete-customer" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="get:\customer:toy-store-sapi-config">
-        <flow-ref doc:name="get-customer-noord" doc:id="1e05dd77-e2b0-4e8c-8681-4a5666e47360" name="get-customer-noord" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="get:\customer\(customerID):toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="5bbec9aa-d2dd-41e5-ac96-7d64c4021291" variableName="URIparams" />
-        <flow-ref doc:name="get-customer" doc:id="e8e30e49-9602-445e-8cc7-8dc8811e2976" name="get-customer" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="post:\customer:application\json:toy-store-sapi-config">
-        <flow-ref doc:name="post-create-user" doc:id="6e818068-06f2-4ab7-a400-e161b69a25f7" name="post-create-user" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="get:\customer\(customerID)\orders:toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="51588be4-3507-406c-b6c0-03389341c6af" variableName="URIparams" />
-        <flow-ref doc:name="get-order" doc:id="a885aae1-d2ac-4383-b8b3-f7a26f063c48" name="get-order" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
-    <flow name="post:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
-        <set-variable value="#[attributes.uriParams.'customerID']" doc:name="URIparams" doc:id="6968d2a0-dffe-4c97-b9f0-cc9e465d557a" variableName="URIparams" />
-        <flow-ref doc:name="post-create-order" doc:id="fe2eeb62-9788-47c6-be9e-28e0d57ebcfd" name="post-create-order" />
-        <error-handler ref="Error_Handler_APP" />
-    </flow>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+	<flow name="toy-store-sapi-main">
+		<http:listener
+			config-ref="toy-store-sapi-httpListenerConfig" path="/api/*">
+			<http:response
+				statusCode="#[vars.httpStatus default 200]">
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:response>
+			<http:error-response
+				statusCode="#[vars.httpStatus default 500]">
+				<http:body>#[payload]</http:body>
+				<http:headers>#[vars.outboundHeaders default {}]</http:headers>
+			</http:error-response>
+		</http:listener>
+		<apikit:router config-ref="toy-store-sapi-config" />
+		<error-handler ref="Error_Handler_APIKIT" />
+	</flow>
+	<flow
+		name="put:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="e66560c5-a21c-411c-b67f-de3fa900f652"
+			variableName="URIparams" />
+		<flow-ref doc:name="put-update-order"
+			doc:id="865d8b45-6544-4d00-9bbd-3eb1f9bdfc6a" name="put-update-order" />
+	</flow>
+	<flow
+		name="put:\customer\(customerID):application\json:toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="c23d092f-1cab-4e0d-8da8-887875e7ee94"
+			variableName="URIparams" />
+		<flow-ref doc:name="put-update-user"
+			doc:id="1208dfe0-46bd-4112-a136-159047903246" name="put-update-user" />
+	</flow>
+	<flow
+		name="delete:\customer\(customerID)\orders:toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="4a2cb6c4-c58a-46dc-abcd-b7b6cf60a67d"
+			variableName="URIparams" />
+		<flow-ref doc:name="delete-order"
+			doc:id="4bf17c6d-8aa5-4bce-ae8f-c8a4f948809a" name="delete-order" />
+	</flow>
+	<flow name="delete:\customer\(customerID):toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="f2f30c0f-a96d-4c3e-84d8-e46671dedffe"
+			variableName="URIparams" />
+		<flow-ref doc:name="delete-customer"
+			doc:id="940cec6d-f72d-4c3c-88b2-5b5d34f4757e" name="delete-customer" />
+	</flow>
+	<flow name="get:\customer:toy-store-sapi-config">
+		<flow-ref doc:name="get-customer-noord"
+			doc:id="1e05dd77-e2b0-4e8c-8681-4a5666e47360"
+			name="get-customer-noord" />
+	</flow>
+	<flow name="get:\customer\(customerID):toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="5bbec9aa-d2dd-41e5-ac96-7d64c4021291"
+			variableName="URIparams" />
+		<flow-ref doc:name="get-customer"
+			doc:id="e8e30e49-9602-445e-8cc7-8dc8811e2976" name="get-customer" />
+	</flow>
+	<flow name="post:\customer:application\json:toy-store-sapi-config">
+		<flow-ref doc:name="post-create-user"
+			doc:id="6e818068-06f2-4ab7-a400-e161b69a25f7" name="post-create-user" />
+	</flow>
+	<flow
+		name="get:\customer\(customerID)\orders:toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="51588be4-3507-406c-b6c0-03389341c6af"
+			variableName="URIparams" />
+		<flow-ref doc:name="get-order"
+			doc:id="a885aae1-d2ac-4383-b8b3-f7a26f063c48" name="get-order" />
+	</flow>
+	<flow
+		name="post:\customer\(customerID)\orders:application\json:toy-store-sapi-config">
+		<set-variable
+			value="#[attributes.uriParams.'customerID']" doc:name="URIparams"
+			doc:id="6968d2a0-dffe-4c97-b9f0-cc9e465d557a"
+			variableName="URIparams" />
+		<flow-ref doc:name="post-create-order"
+			doc:id="fe2eeb62-9788-47c6-be9e-28e0d57ebcfd"
+			name="post-create-order" />
+	</flow>
 </mule>
